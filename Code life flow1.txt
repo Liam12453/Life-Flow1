@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Life Flow - Life Flow App</title>
+  <style>
+    /* ===== Base ===== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.7; color: #1f2937; }
+    h1,h2,h3,h4 { color: #111827; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; height: auto; }
+    html { scroll-behavior: smooth; }
+
+    /* ===== Navbar (fixed + highlight) ===== */
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: #111827; }
+    .nav-wrap { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: center; height: 64px; padding: 0 20px; }
+    .nav { list-style: none; display: flex; gap: 28px; }
+    .nav a { color: #fff; font-weight: 700; padding-bottom: 6px; }
+    .nav a.active { border-bottom: 2px solid #fff; }
+
+    /* account for fixed nav when scrolling */
+    section { scroll-margin-top: 80px; }
+
+    /* ===== Sections ===== */
+    .section { min-height: 100vh; padding: 100px 20px 80px; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+    .container { width: 100%; max-width: 1100px; margin: 0 auto; }
+
+    /* Hero */
+    #home { color: #fff; text-align: center; background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat; }
+    #home .hero-card { background: rgba(17,24,39,.8); padding: 32px 22px; border-radius: 16px; max-width: 860px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+    #home h1 { font-size: 44px; margin-bottom: 10px; }
+    #home p { font-size: 20px; }
+
+    /* About */
+    #about { background: #ffffff; }
+    #about .grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: center; }
+    #about h2 { font-size: 36px; margin-bottom: 6px; }
+    #about .rule { width: 80px; height: 6px; background: #4b0f3f; border-radius: 4px; margin: 10px 0 18px; }
+    #about p { color: #111827; }
+    #about .photo { border-radius: 10px; box-shadow: 0 14px 40px rgba(0,0,0,.15); }
+
+    /* Services */
+    #services { background: #f7f7f8; }
+    #services h2 { font-size: 34px; text-align: center; margin-bottom: 6px; }
+    #services .rule { width: 80px; height: 6px; background: #4b0f3f; border-radius: 4px; margin: 14px auto 26px; }
+    .cards { display: grid; gap: 28px; grid-template-columns: repeat(3, minmax(220px,1fr)); }
+    .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 26px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,.05); }
+    .card .thumb { width: 220px; height: 220px; margin: 0 auto 14px; border-radius: 999px; overflow: hidden; border: 6px solid #eee; }
+    .card h3 { font-size: 22px; margin-bottom: 8px; }
+
+    /* Pricing */
+    #pricing { background: #ffffff; }
+    #pricing h2 { font-size: 34px; text-align: center; margin-bottom: 6px; }
+    #pricing .rule { width: 80px; height: 6px; background: #4b0f3f; border-radius: 4px; margin: 14px auto 26px; }
+    .pricing-grid { display: grid; gap: 24px; grid-template-columns: repeat(3, minmax(240px,1fr)); }
+    .price-card { background: #fff; border: 1px solid #ddd; border-radius: 16px; padding: 22px; box-shadow: 0 24px 50px rgba(0,0,0,.08); }
+    .price-card h4 { text-align: center; letter-spacing: 2px; font-size: 14px; color: #374151; }
+    .money { text-align: center; font-size: 40px; font-weight: 900; margin: 10px 0; }
+    .per { font-size: 14px; color: #6b7280; }
+    .divider { height: 2px; background: #e5e7eb; margin: 14px 0; }
+    .pill { text-align: center; font-size: 12px; color: #6b7280; margin-top: 6px; }
+    .popular { border: 3px solid #4b0f3f; box-shadow: 0 24px 60px rgba(75,15,63,.15); }
+    .cta { display: block; background: #4b0f3f; color: #fff; text-align: center; padding: 14px; border-radius: 6px; font-weight: 800; margin: 18px auto 0; max-width: 320px; }
+    .cta:hover { background: #6b1a59; }
+    .list { color: #374151; line-height: 1.9; }
+
+    /* Contact / Footer */
+    #contact { background: #f7f7f8; }
+    .contact-grid { display: grid; gap: 16px; grid-template-columns: repeat(2,minmax(240px,1fr)); }
+    .contact-item { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; }
+    footer { background: #111827; color: #9ca3af; padding: 22px; text-align: center; }
+    footer .brand { color: #fff; font-weight: 800; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      #about .grid { grid-template-columns: 1fr; }
+      .cards, .pricing-grid, .contact-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== NAVBAR ===== -->
+  <div class="navbar">
+    <div class="nav-wrap">
+      <ul class="nav">
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#services" class="nav-link">Services</a></li>
+        <li><a href="#pricing" class="nav-link">Pricing Table</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== HOME / HERO ===== -->
+  <section id="home" class="section">
+    <div class="container">
+      <div class="hero-card">
+        <h1>Life Flow App</h1>
+        <p>Simplify Your Schedule, Enhance Your Life</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about" class="section">
+    <div class="container">
+      <div class="grid">
+        <img class="photo" alt="About" src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1200&auto=format&fit=crop" />
+        <div>
+          <h2>Why Choose Life Flow?</h2>
+          <div class="rule"></div>
+          <p>Life Flow is your daily planner and life management app designed to streamline your routine and enhance productivity. It provides timely reminders for critical tasks like paying rent, and ensures no essential deadlines or plans are missed. Embrace a smoother, more organized lifestyle with Life Flow.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section id="services" class="section">
+    <div class="container">
+      <h2 style="text-align:center">Services</h2>
+      <div class="rule" style="margin: 12px auto 26px; width:80px; height:6px; background:#4b0f3f; border-radius:4px"></div>
+      <div class="cards">
+        <article class="card">
+          <div class="thumb"><img alt="Organize your life" src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=600&auto=format&fit=crop" /></div>
+          <h3>Organize Your Life Effortlessly</h3>
+          <p>Life Flow brings all your important events, tasks, and bills into one easy to use app. Sync calendars, set reminders, and keep your day running smoothly so nothing slips through the cracks.</p>
+        </article>
+        <article class="card">
+          <div class="thumb"><img alt="Smart reminders" src="https://images.unsplash.com/photo-1512412046875-4c971a7ae5f8?q=80&w=600&auto=format&fit=crop" /></div>
+          <h3>Stay Ahead with Smart Reminders</h3>
+          <p>Receive timely, personalized notifications for bills, appointments, and tasks. Life Flow’s smart alerts keep you stress free and on track every day.</p>
+        </article>
+        <article class="card">
+          <div class="thumb"><img alt="Schedule management" src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?q=80&w=600&auto=format&fit=crop" /></div>
+          <h3>Schedule Management</h3>
+          <p>Easily set reminders and organize tasks with a simple yet effective interface.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRICING ===== -->
+  <section id="pricing" class="section">
+    <div class="container">
+      <h2 style="text-align:center">Pricing Table</h2>
+      <div class="rule" style="margin: 12px auto 26px; width:80px; height:6px; background:#4b0f3f; border-radius:4px"></div>
+
+      <div class="pricing-grid">
+        <!-- Basic -->
+        <article class="price-card">
+          <h4>BASIC</h4>
+          <div class="divider"></div>
+          <div class="money">R 99.99 <span class="per">/Month</span></div>
+          <div class="divider"></div>
+          <div class="list">
+            <p><strong>Recommended for:</strong> Students and individuals who want simple, effective organization.</p>
+            <p><strong>Includes:</strong></p>
+            <ul>
+              <li>Task and event tracking</li>
+              <li>Basic reminders</li>
+              <li>Calendar sync</li>
+              <li>Up to 5 bill alerts per month</li>
+            </ul>
+          </div>
+          <a class="cta" href="#contact">Buy now</a>
+        </article>
+
+        <!-- Advanced -->
+        <article class="price-card popular">
+          <h4>ADVANCED</h4>
+          <div class="pill">MOST POPULAR</div>
+          <div class="divider"></div>
+          <div class="money">R 149.99 <span class="per">/Month</span></div>
+          <div class="divider"></div>
+          <div class="list">
+            <p><strong>Recommended for:</strong> Busy professionals or freelancers who need more control and flexibility.</p>
+            <p><strong>Includes:</strong></p>
+            <ul>
+              <li>Everything in Basic</li>
+              <li>Unlimited bill alerts</li>
+              <li>Custom routines and habit tracking</li>
+              <li>Smart suggestions for task planning</li>
+              <li>Priority reminders</li>
+            </ul>
+          </div>
+          <a class="cta" href="#contact">Buy now</a>
+        </article>
+
+        <!-- Premium -->
+        <article class="price-card">
+          <h4>PREMIUM</h4>
+          <div class="divider"></div>
+          <div class="money">R 199.99 <span class="per">/Month</span></div>
+          <div class="divider"></div>
+          <div class="list">
+            <p><strong>Recommended for:</strong> Power users, families, or teams who want the full Life Flow experience.</p>
+            <p><strong>Includes:</strong></p>
+            <ul>
+              <li>Everything in Advanced</li>
+              <li>Family or team collaboration tools</li>
+              <li>Advanced analytics and productivity insights</li>
+              <li>Mood and wellness tracking</li>
+              <li>VIP customer support</li>
+            </ul>
+          </div>
+          <a class="cta" href="#contact">Order Now</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" class="section">
+    <div class="container">
+      <h2 style="text-align:center">Contact</h2>
+      <div class="rule" style="margin: 12px auto 26px; width:80px; height:6px; background:#4b0f3f; border-radius:4px"></div>
+      <div class="contact-grid">
+        <div class="contact-item"><strong>Email</strong><br/>lifeflow@yahoo.com</div>
+        <div class="contact-item"><strong>Contact Info</strong><br/>+27-999-7777-000</div>
+        <div class="contact-item"><strong>Address</strong><br/>Manenberg Avenue, Manenberg, Cape Town, South Africa</div>
+        <div class="contact-item"><strong>Business Hours</strong><br/>Mon–Fri - 08:00–19:00</div>
+      </div>
+      <p style="text-align:center; margin-top: 12px; color:#6b7280">For more info contact us.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+      <div class="brand" style="font-weight:800; color:#fff">Life Flow</div>
+      <div>Copyright © 2025 All rights reserved</div>
+    </div>
+  </footer>
+
+  <!-- ===== Scrollspy highlight (active link) ===== -->
+  <script>
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section');
+
+    const makeActive = (id) => {
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === `#${id}`);
+      });
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          makeActive(entry.target.id);
+        }
+      });
+    }, { rootMargin: '-50% 0px -50% 0px', threshold: 0.01 });
+
+    sections.forEach(sec => observer.observe(sec));
+  </script>
+</body>
+</html>
